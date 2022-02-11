@@ -11,6 +11,7 @@ import os
 from httprunner3_common import HttpRunner3Common
 from httprunner3_logging import logger
 
+
 #  ic.disable()
 
 
@@ -140,7 +141,7 @@ class HttpRunner3(object):
         _testcases_path = self._obj_common.cli_parameters["testcases"]
         _need_clean = self._obj_common.cli_parameters["clean"]
         work_dir = os.path.abspath(os.path.curdir)
-        logger.debug(ic(work_dir)) if self._verbose_mode else ic(work_dir)
+        logger.debug(f"current dir: {work_dir}")
 
         if not os.path.exists(_yaml_path):
             # ic(yaml_path)
@@ -181,13 +182,13 @@ class HttpRunner3(object):
 
         for file in files:
             target_file_path = files[file]
-            logger.debug(f"make {file} -> {target_file_path}")
+            logger.debug(f"make {file} -> {target_file_path} ...")
             target_dir_path = os.path.dirname(target_file_path).strip()
-            if not target_dir_path=="" and not os.path.exists(target_dir_path):
+            if not target_dir_path == "" and not os.path.exists(target_dir_path):
                 os.makedirs(target_dir_path, exist_ok=True)
             self.make_one_file(file, target_file_path)
             # ic(file, target_file_path)
-            logger.debug(ic(file, target_file_path))
+            logger.debug(f"make {file} -> {target_file_path} finished.")
 
 
 if __name__ == "__main__":

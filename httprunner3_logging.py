@@ -27,7 +27,7 @@ class HttpRunner3Logger:
 
         self.logger.setLevel(logging.DEBUG)
 
-        ic("logger init finished.")
+        # ic("logger init finished.")
 
 
 __app_logger = HttpRunner3Logger()
