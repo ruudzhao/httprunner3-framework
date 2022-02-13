@@ -7,6 +7,7 @@ import yaml.loader
 from icecream import ic
 from jinja2 import Environment, select_autoescape, FileSystemLoader
 from os import scandir, DirEntry
+from copy import deepcopy
 import os
 from httprunner3_common import HttpRunner3Common
 from httprunner3_logging import logger
@@ -45,7 +46,8 @@ class HttpRunner3(object):
 
     def make_one_step(self, _whole_config, _target_fp):
         template = self._obj_common.load_template("config_section.py")
-        base_url = _whole_config["config"].get("base_url", "")
+        config = _whole_config["config"]
+        base_url = config.get("base_url", "")
         config_content = template.render(base_url=base_url)
         # ic(config_content)
         _target_fp.write(config_content)
@@ -106,24 +108,27 @@ class HttpRunner3(object):
                 request_name = "http_request"
                 # ic(request_name)
 
+                variables = deepcopy(config.get("variables", {}))
+                variables.update(step.get("variables", {}))
                 # module_name = f"http_request_{step_no + 1}_{case_no + 1}"
                 request_name = f"{request_name}_{step_no + 1}_{request_no + 1}"
                 case_content = template.render(request_name=request_name, request_method=step["method"],
                                                request_data=request_data, request_url=step["url"],
                                                request_headers=headers,
                                                extract_list=request.get("extract", {}),
-                                               variables=step.get("variables", {}))
+                                               variables=variables)
                 # ic(case_content)
                 case_content = self._obj_common.handle_template_python_express(case_content)
 
                 _target_fp.write(case_content)
 
-                testcases_dict = request.get("testcases", [])
-                if len(testcases_dict) == 0:
+                testcases_list = deepcopy(config.get("testcases", []))
+                testcases_list.extend(request.get("testcases", []))
+                if len(testcases_list) == 0:
                     _msg = f"at least need one testcase: {request}"
                     logger.error(_msg)
                     raise SystemExit(_msg)
-                for testcase_no, testcase in enumerate(testcases_dict):
+                for testcase_no, testcase in enumerate(testcases_list):
                     # testcase_name = f"test_{module_name}_{validate_no + 1}"
                     # testcase_name = f"{module_name}_{validate_no + 1}"
                     testcase_name = f"testcase_{step_no + 1}_{request_no + 1}_{testcase_no + 1}"
