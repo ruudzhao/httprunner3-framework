@@ -1,6 +1,6 @@
 
 class ObjectDotAccessWrapper:
-    raw = None
+    raw = {}
 
     def __init__(self, _data):
         self._data = _data
