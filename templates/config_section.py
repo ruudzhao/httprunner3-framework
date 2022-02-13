@@ -1,10 +1,13 @@
 import sys
 import os
+import copy
+import importlib
 import time
 from string import Template
 import pytest
 import requests
 from icecream import ic
+import jmespath
 
 {% include 'common_section.py' %}
 {% include 'import_section.py' %}
@@ -30,7 +33,8 @@ class HttpRequests:
                      "body": r.json(),
                      "url": r.url,
                      "content_length": r.headers.get('content-length', -1),
-                     "request_headers": r.request.headers}
+                     "request_headers": r.request.headers,
+                     "data": _data}
         return full_data
 
 

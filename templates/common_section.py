@@ -1,15 +1,14 @@
-import jmespath
-from string import Template
-
 
 class ObjectDotAccessWrapper:
+    raw = None
+
     def __init__(self, _data):
-        self.data = _data
+        self._data = _data
         if isinstance(_data, (dict, list, tuple)):
             self.__recurse_flat(self, _data)
 
     def __repr__(self):
-        return str(self.data)
+        return str(self._data)
 
     def __recurse_flat(self, _object, _dict):
         for key in _dict:
@@ -46,9 +45,7 @@ def __replace_parameters(parameters_dict, module_object_dict):
             # ic(parameter_key, value)
 
 
-def __compose_compare_express(testcase_dict, full_message):
-    compare_operator, compare_values = testcase_dict.popitem()
-    compare_operator = compare_operator.lower()
+def __compose_compare_express(compare_operator, compare_values, full_message):
     fact_express = compare_values[0]
     fact_value = jmespath.search(fact_express, full_message)
     excepted_value = compare_values[1]

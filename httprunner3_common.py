@@ -9,6 +9,7 @@ import argparse
 import pprint
 from httprunner3_logging import logger
 
+
 #
 # def to_string(obj):
 #     print("obj", obj)
@@ -119,9 +120,8 @@ class HttpRunner3Common(object):
         )
         return env.get_template(_file_path)
 
-    def load_template_from_string(self, _content):
-        env = Environment(variable_start_string="'{{", variable_end_string="}}'")
-        return env.from_string(_content)
+    def handle_template_python_express(self, _content):
+        return _content.replace("'<%-", "").replace("-%>'", "")
 
     def request_data(self, data_dict, alias_data_dict, parameters_dict, is_data_base=True):
         # ic(parameters_dict)

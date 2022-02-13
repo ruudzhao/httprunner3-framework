@@ -1,6 +1,3 @@
-import importlib
-import os
-
 # 引入当前目录作为模块导入的搜索目录
 # 方法1：设置PYTHONPATH环境变量为%cd%
 # print("PYTHONPATH", os.environ.get("PYTHONPATH", ""))
@@ -11,3 +8,4 @@ import os
 # 方法3：使用import_module函数
 if os.path.exists("httprunner3_public.py"):
     public = importlib.import_module("httprunner3_public")
+

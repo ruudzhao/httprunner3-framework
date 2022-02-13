@@ -114,8 +114,7 @@ class HttpRunner3(object):
                                                extract_list=request.get("extract", {}),
                                                variables=step.get("variables", {}))
                 # ic(case_content)
-                template = self._obj_common.load_template_from_string(case_content)
-                case_content = template.render()
+                case_content = self._obj_common.handle_template_python_express(case_content)
 
                 _target_fp.write(case_content)
 
